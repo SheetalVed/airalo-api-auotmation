@@ -1,0 +1,245 @@
+Project Name,Airalo_API_Automation,,,,,,,,,
+Endpoints Covered,"https://sandbox-partners-api.airalo.com/v2/token
+https://sandbox-partners-api.airalo.com/v2/orders
+https://sandbox-partners-api.airalo.com/v2/sims",,,,,,,,,
+Reference Document,https://partners-doc.airalo.com/,,,,,,,,,
+Created By,Sheetal Bhatia,,,,,,,,,
+Date of Creation,12-08-2024,,,,,,,,,
+Reviewed By,,,,,,,,,,
+Date of Review,,,,,,,,,,
+,,,,,,,,,,
+Test Case ID,Test Case,Test Case Description,Priority,Environment,Pre-condition,Test steps,Test Data,Expected Result,Actual Result,Status
+TC_AIRALO_API_001,Successful authentication with valid client_id and client_secret,Verify successful OAuth2 token retrieval with valid credentials.,High,QA Instance,Valid credentials provided.,"1. Send POST request to /v2/token.
+2. Include valid credentials in the request body.","{
+""client_id"": ""974d515d41f86868eccd2d22aae8d10e"",
+ ""client_secret"": ""tILYEqQRq5PnZ5nccQZ1IiVugUWhZN2UveJZ9rVa"", 
+""grant_type"": ""client_credentials""
+}","Status Code 200 OK.
+Response contains access_token.","status code : 200
+
+""data"": {
+        ""token_type"": ""Bearer"",
+        ""expires_in"": 31536000,
+        ""access_token"":""`${access_token}""
+},
+    ""meta"": {
+        ""message"": ""success""
+    }
+}",Passed
+TC_AIRALO_API_002,Authentication with valid client_id and invalid client_secret,Verify error handling with invalid OAuth2 credentials,High,QA Instance,Invalid credentials provided.,"1. Send POST request to /v2/token.
+2. Include valid credentials in the request body.","{
+""client_id"": ""valid_client_id"", 
+""client_secret"": ""invalid_client_secret"",
+ ""grant_type"": ""client_credentials""
+}","Status Code 401 Unauthorized.
+
+{
+  ""data"": [],
+  ""meta"": {
+    ""message"": ""Client authentication failed""
+  }
+}","status code : 401
+
+{
+    ""data"": [],
+    ""meta"": {
+        ""message"": ""Client authentication failed""
+    }
+}",Passed
+TC_AIRALO_API_003,Authentication with invalid client_id and valid client_secret,Verify error handling with invalid OAuth2 credentials,High,QA Instance,Invalid credentials provided.,"1. Send POST request to /v2/token.
+2. Include valid credentials in the request body.","{
+""client_id"": ""invalid_client_id"", 
+""client_secret"": ""valid_client_secret"",
+ ""grant_type"": ""client_credentials""
+}","Status Code 422 
+
+{
+  ""data"": {
+    ""client_id"": ""The selected client id is invalid.""
+  },
+  ""meta"": {
+    ""message"": ""the parameter is invalid""
+  }
+}","status code : 422
+
+{
+    ""data"": {
+        ""client_id"": ""Your account is terminated.""
+    },
+    ""meta"": {
+        ""message"": ""the parameter is invalid""
+    }
+}",Failed
+TC_AIRALO_API_004,Authentication with only client_id and without client_secret,Verify error handling when client secret is not provided.,Medium,QA Instance,Missing client secret in request body.,"1. Send POST request to /v2/token.
+2. Include valid credentials in the request body.","{
+""client_id"": ""valid_client_id"", 
+""client_secret"": ""blank"",
+ ""grant_type"": ""client_credentials""
+}","Status Code 422 Unprocessable Entity.
+Error message for missing client_secret","status code : 422
+{
+    ""data"": {
+        ""client_secret"": ""The client secret field is required.""
+    },
+    ""meta"": {
+        ""message"": ""the parameter is invalid""
+    }
+}",Passed
+TC_AIRALO_API_005,Authentication without client_id and with client_secret,Verify error handling when client id is not provided.,Medium,QA Instance,QA Instance,"1. Send POST request to /v2/token.
+2. Include valid credentials in the request body.","{
+""client_id"": ""valid_client_id"", 
+""client_secret"": ""blank"",
+ ""grant_type"": ""client_credentials""
+}","Status Code 422 Unprocessable Entity.
+Error message for missing client_secret","status code : 422
+{
+    ""data"": {
+        ""client_secret"": ""The client secret field is required.""
+    },
+    ""meta"": {
+        ""message"": ""the parameter is invalid""
+    }
+}",Passed
+TC_AIRALO_API_006,Authentication with client_id and  client_secret but without grant type,Verify error handling when client id is not provided.,Medium,QA Instance,QA Instance,"1. Send POST request to /v2/token.
+2. Include valid credentials in the request body.","{
+""client_id"": ""valid_client_id"", 
+""client_secret"": ""blank"",
+ ""grant_type"": """"
+}",Unauthorised access,status code : 200,Failed
+TC_AIRALO_API_007,Successfully Post an Order,"Verify that an order for 6 ""merhaba-7days-1gb"" eSIMs can be placed.",High,QA Instance,QA Instance,"1. Send POST request to /v2/orders.
+2. Include valid OAuth2 token in the headers.
+3. Include Accept value as application/json in the headers
+3. Include order details in the request body.","Body form-data {
+""quantity"": 6 (required),
+""package_id"": ""merhaba-7days-1gb"" (required), 
+""type"": ""description"" (optional),
+""description"": ""6 sim merhaba-7days-1gb (optional)""
+}","Status Code 200 Created.
+Response includes order ID and details.",status code : 200,Passed
+TC_AIRALO_API_008,Posting an order with invalid token,Verify error handling when using an invalid OAuth2 token for retrieval.,High,QA Instance,QA Instance,"1. Send POST request to /v2/orders.
+2. Include invalid OAuth2 token in the headers.","Body form-data {
+""quantity"": 6 (required),
+""package_id"": ""merhaba-7days-1gb"" (required), 
+""type"": ""description"" (optional),
+""description"": ""6 sim merhaba-7days-1gb (optional)""
+}",Unauthorised access,status code : 200,Failed
+TC_AIRALO_API_009,Posting an order without token,Verify error handling when no token value is provided for posting an order.,High,QA Instance,QA Instance,"1. Send POST request to /v2/orders.
+2. Do not provide token in the headers","Body form-data {
+""quantity"": 6 (required),
+""package_id"": ""merhaba-7days-1gb"" (required), 
+""type"": ""sim"" (optional),
+""description"": ""6 sim merhaba-7days-1gb (optional)""
+}",Unauthorised access,status code : 200,Failed
+TC_AIRALO_API_010,Successfully Post an Order with Maximum quantity,"Verify that an order for 50 ""merhaba-7days-1gb"" eSIMs can be placed.",High,QA Instance,QA Instance,"1. Send POST request to /v2/orders
+2. Include valid OAuth2 token in the headers.
+3. Include order details in the request body.","Body form-data {
+""quantity"": 50 (required),
+""package_id"": ""merhaba-7days-1gb"" (required), 
+""type"": ""sim"" (optional),
+""description"": ""50 sim merhaba-7days-1gb (optional)""
+}","Response Status Code : 200
+Response includes order ID and details.",status code : 200,Passed
+TC_AIRALO_API_011,Post an order with exceeding Available Quantity,Verify error handling when ordering more than expected quantity.,High,QA Instance,QA Instance,"1. Send POST request to /v2/orders.
+2. Include valid OAuth2 token in the headers.
+3. Set quantity higher than available stock.","Body form-data {
+""quantity"": 51 (required),
+""package_id"": ""merhaba-7days-1gb"" (required), 
+""type"": ""sim"" (optional),
+""description"": ""51 sim merhaba-7days-1gb (optional)""
+}","Response Status Code : 422{
+  ""data"": {
+    ""package_id"": ""The selected package is invalid."",
+    ""quantity"": ""The quantity may not be greater than 50.""
+  },
+  ""meta"": {
+    ""message"": ""the parameter is invalid""
+  }
+}","Response Status Code : 401
+{
+    ""data"": [],
+    ""meta"": {
+        ""message"": ""Forbidden""
+    }
+}",Failed
+TC_AIRALO_API_012,Post an order without providing quantity (required field),Verify error handling when ordering without quantity value,High,QA Instance,QA Instance,"1. Send POST request to /v2/orders.
+2. Include valid OAuth2 token in the headers.
+3. Set quantity higher than available stock.","Body form-data {
+""quantity"": blank (required),
+""package_id"": ""merhaba-7days-1gb"" (required), 
+""type"": ""sim"" (optional),
+""description"": ""sim merhaba-7days-1gb (optional)""
+}",NA,"Response Status Code : 401
+{
+    ""data"": [],
+    ""meta"": {
+        ""message"": ""Forbidden""
+    }
+}",
+TC_AIRALO_API_013,"Post an order with quantity value type as ""String""","Verify error handling when ordering with quantity value type as ""String""",Medium,QA Instance,Valid OAuth2 token obtained.,"1. Send POST request to /v2/orders.
+2. Include valid OAuth2 token in the headers.
+3. Set quantity higher than available stock.","Body form-data {
+""quantity"": fifty (required),
+""package_id"": ""merhaba-7days-1gb"" (required), 
+""type"": ""sim"" (optional),
+""description"": ""51 sim merhaba-7days-1gb (optional)""
+}",NA,"Response Status Code : 401
+{
+    ""data"": [],
+    ""meta"": {
+        ""message"": ""Forbidden""
+    }
+}",
+TC_AIRALO_API_014,Post an order without providing package id (required field),Verify error handling when ordering without package id,High,QA Instance,Valid OAuth2 token obtained.,"1. Send POST request to /v2/orders.
+2. Include valid OAuth2 token in the headers.
+3. Set quantity higher than available stock.","Body form-data {
+""quantity"": 50 (required),
+""package_id"": ""blank"" (required), 
+""type"": ""sim"" (optional),
+""description"": ""50 sim merhaba-7days-1gb (optional)""
+}",NA,"Response Status Code : 401
+{
+    ""data"": [],
+    ""meta"": {
+        ""message"": ""Forbidden""
+    }
+}",
+TC_AIRALO_API_015,"Post an order with package id value type as ""integers"" or ""unknown package id""","Verify error handling when ordering with quantity value type as ""integers""",Medium,QA Instance,Valid OAuth2 token obtained.,"1. Send POST request to /v2/orders.
+2. Include valid OAuth2 token in the headers.
+3. Set quantity higher than available stock.","Body form-data {
+""quantity"": 50 (required),
+""package_id"": ""test_package_123"" (required), 
+""type"": ""sim"" (optional),
+""description"": ""50 sim merhaba-7days-1gb (optional)""
+}",NA,"Response Status Code : 401
+{
+    ""data"": [],
+    ""meta"": {
+        ""message"": ""Forbidden""
+    }
+}",
+TC_AIRALO_API_016,Successfully retrieve complete eSIMs list,Verify that the complete eSIMs list is retrieved,High,QA Instance,Valid OAuth2 token obtained.,"1. Send GET request to /v2/sims.
+2. Include valid OAuth2 token in the headers.",,"Response Status Code : 200
+",Response Status Code : 200,Passed
+TC_AIRALO_API_017,Successfully retrieve filtered eSIMs list,Verify that the filtered eSIMs list is retrieved based on applied filters,High,QA Instance,Valid OAuth2 token obtained.,"1. Send GET request to v2/sims.
+2. Include valid OAuth2 token in the headers.",,"Response Status Code : 200
+",Response Status Code : 200,Passed
+TC_AIRALO_API_018,Invalid Token for Retrieval of eSIMs list,Verify error handling when using an invalid OAuth2 token for retrieval.,High,QA Instance,Invalid OAuth2 token provided.,"1. Send GET request to /esims.
+2. Include invalid OAuth2 token in the headers.",,Unauthorised access,Response Status Code : 200,Failed
+TC_AIRALO_API_019,Retrieve eSIMs list with invalid limit value,Verify error handling when eetrieve eSIMs list with invalid limit value,High,QA Instance,Valid OAuth2 token obtained.,"1. Send GET request to v2/sims.
+2. Include valid OAuth2 token in the headers.",,"Response code : 422
+
+{
+  ""data"": {
+    ""limit"": ""The limit must be an integer.""
+  },
+  ""meta"": {
+    ""message"": ""the parameter is invalid""
+  }
+}","Response code : 422
+
+{
+    ""data"": [],
+    ""meta"": {
+        ""message"": ""Forbidden""
+    }
+}",Failed
