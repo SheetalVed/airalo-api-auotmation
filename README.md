@@ -10,10 +10,10 @@ This project contains automated tests for the Airalo API using Postman. The test
 - [Node.js] (https://nodejs.org/) (if using Newman for command-line execution)
 
 ### Environment Setup
-1. **Install Postman: **
+1. Install Postman:
    - Download and install Postman from the official website.
 
-2. **Install Newman (Optional): **
+2. Install Newman (Optional):
    - If you plan to run tests via the command line, install Newman globally:
      npm install -g newman
 
