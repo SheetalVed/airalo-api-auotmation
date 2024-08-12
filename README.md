@@ -7,27 +7,29 @@ This project contains automated tests for the Airalo API using Postman. The test
 
 ### Software Requirements
 - [Postman](https://www.postman.com/downloads/) (latest version)
-- [Node.js] (https://nodejs.org/) (if using Newman for command-line execution)
 
 ### Environment Setup
 1. Install Postman:
    - Download and install Postman from the official website.
 
-2. Install Newman (Optional):
-   - If you plan to run tests via the command line, install Newman globally:
-     npm install -g newman
 
 ## Configuration
 ### Environment Variables
-Ensure you have set up the following environment variables in Postman: 
+## Ensure you have set up the following collection variables in Postman: 
 - **`baseURL`**: Base URL for the API (e.g., `https://sandbox-partners-api.airalo.com `). 
-- **`clientID`**: Your client ID for OAuth2 authentication.
-- **`clientSecret`**: Your client secret for OAuth2 authentication.
-- **`maxQuantity`**: The maximum supported quantity of items in the order.
-- **`exceedingMaxQuantity`**: The quantity more than the supported quantity of items in the order.
-- **`simPackageID`**: The package ID associated with the order.
+- **`clientID`**: **Your client ID** for OAuth2 authentication.
+- **`clientSecret`**: **Your client secret** for OAuth2 authentication.
+- **`maxQuantity`**: The maximum supported quantity of items in the order (e.g., `50`).
+- **`exceedingMaxQuantity`**: The quantity more than the supported quantity of items in the order (e.g., `51`).
+- **`quantity`**: expected quantity (e.g., `6`).
+- **`simPackageID`**: sim package id (e.g., `merhaba-7days-1gb`).
 - **`packageType`**: type of package (e.g., `sim `).
+- **`filterByLimit`**: filter sim list via limit (e.g., `5`).
+- **`filterByPage`**: filter sim list via page (e.g., `1`).
 
+## Note : Following variables will get set automatically inside collection variable
+- **`filterByCreated_at`**:
+- **`filterByIccid`**:
 
 ## Test Cases
 ### Test Case Summary
@@ -59,16 +61,13 @@ Here are some key test cases to give an overview: -
 
 ### Running Tests in Postman
 1. Select the ` AiraloAPIsValidation ` collection from the Collections tab.
-2. Click on the **“Runner” ** button located in the Postman footer, at the bottom of the interface.
+2. Click on the **“Run” ** button.
 3. Configure the Collection Runner:
    - **Data File:** Optionally, upload a data file if your collection uses data-driven tests.
    - **Iterations:** Set the number of iterations if running tests multiple times.
    - **Delay:** Add a delay between requests if needed.
-4. Click **“Run”** to execute the tests.
+4. Click **“Run AiraloAPIsValidation”** to execute the tests.
 
-### Running Tests with Newman (Optional)
-To run the tests via the command line:
-newman run AiraloAPIsValidation.postman_collection.json
 
 ### Documentation
 
