@@ -54,6 +54,11 @@ Here are some key test cases to give an overview: -
 
 ## Getting Started
 
+### Clone the Repository
+
+
+      git clone https://github.com/SheetalVed/airalo-api-auotmation.git
+
 ### Importing the Collection
 1. Open Postman.
 2. Go to the "Collections" tab on the left sidebar.
