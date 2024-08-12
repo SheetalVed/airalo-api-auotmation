@@ -1,0 +1,1691 @@
+{
+	"info": {
+		"_postman_id": "78bbf9cc-8ecd-4db5-a923-0d9feecdc008",
+		"name": "AiraloAPIsValidation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11357861"
+	},
+	"item": [
+		{
+			"name": "RequestAccessToken",
+			"item": [
+				{
+					"name": "Successful Authentication",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonResponse = pm.response.json();\r",
+									"\r",
+									"pm.test('Response status code is 200',function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Content-Type is application/json',function(){\r",
+									"    pm.response.to.have.header('Content-Type','application/json');\r",
+									"});\r",
+									"\r",
+									"pm.test('Response contains token_type',function(){\r",
+									"    pm.expect(jsonResponse).to.have.property('data').that.has.property('token_type');\r",
+									"});\r",
+									"\r",
+									"pm.test('Response contain expires_in',function(){\r",
+									"    pm.expect(jsonResponse).to.have.property('data').that.has.property('expires_in');\r",
+									"});\r",
+									"\r",
+									"pm.test('Response contain access_token',function(){\r",
+									"    pm.expect(jsonResponse).to.have.property('data').that.has.property('access_token');\r",
+									"});\r",
+									"\r",
+									"pm.test('Access_token is not empty',function(){\r",
+									"    pm.expect(jsonResponse.data.access_token).to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"pm.test('Token_type is a bearer',function(){\r",
+									"    pm.expect(jsonResponse.data.token_type).to.eql('Bearer');\r",
+									"});\r",
+									"\r",
+									"pm.test('Response message is success',function(){\r",
+									"    pm.expect(jsonResponse.meta.message).to.eql('success');\r",
+									"});\r",
+									"\r",
+									"pm.test('Token expires in reasonable time',function(){\r",
+									"    pm.expect(jsonResponse.data.expires_in).to.be.greaterThan(0);\r",
+									"});\r",
+									"\r",
+									"console.log(jsonResponse.data.token_type)\r",
+									"console.log(jsonResponse.data.access_token)\r",
+									"\r",
+									"pm.collectionVariables.set('token_type', jsonResponse.data.token_type);\r",
+									"pm.collectionVariables.set('access_token', jsonResponse.data.access_token);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "client_id",
+									"value": "{{clientID}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{clientSecret}}",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v2/token",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authentication with valid client_id and invalid client_secret",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonResponse = pm.response.json();\r",
+									"\r",
+									"pm.test('Response status code is 401 for invalid credentials',function(){\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"pm.test('Content-Type is application/json',function(){\r",
+									"    pm.response.to.have.header('Content-Type','application/json');\r",
+									"});\r",
+									"\r",
+									"pm.test('Response message is : Client authentication failed',function(){\r",
+									"    pm.expect(jsonResponse.meta.message).to.eql('Client authentication failed');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "client_id",
+									"value": "974d515d41f86868eccd2d22aae8d10e",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "tILYEqABCDEFGHIJK1IiVugUWhZN2UveJZ9rVa",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v2/token",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authentication with invalid client_id and valid client_secret",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonResponse = pm.response.json();\r",
+									"\r",
+									"pm.test('Response status code is 422 for invalid client_id',function(){\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"pm.test('Content-Type is application/json',function(){\r",
+									"    pm.response.to.have.header('Content-Type','application/json');\r",
+									"});\r",
+									"\r",
+									"pm.test('Response client_id is The selected client id is invalid.',function(){\r",
+									"    pm.expect(jsonResponse.data.client_id).to.be.eql('The selected client id is invalid.')\r",
+									"})\r",
+									"\r",
+									"pm.test('Response message is : the parameter is invalid',function(){\r",
+									"    pm.expect(jsonResponse.meta.message).to.eql('the parameter is invalid');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "client_id",
+									"value": "974d515d41f86868eccd2d22aae8d10r",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "tILYEqQRq5PnZ5nccQZ1IiVugUWhZN2UveJZ9rVa",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v2/token",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authentication with only client_id and without client_secret",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonResponse = pm.response.json();\r",
+									"\r",
+									"pm.test('Response status code is 422 for authentication without client_secret',function(){\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"pm.test('Content-Type is application/json',function(){\r",
+									"    pm.response.to.have.header('Content-Type','application/json');\r",
+									"});\r",
+									"\r",
+									"pm.test('Response for client_secret is The client secret field is required.',function(){\r",
+									"    pm.expect(jsonResponse.data.client_secret).to.be.eql('The client secret field is required.')\r",
+									"})\r",
+									"\r",
+									"pm.test('Response message is the parameter is invalid',function(){\r",
+									"    pm.expect(jsonResponse.meta.message).to.eql('the parameter is invalid');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "client_id",
+									"value": "{{clientID}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v2/token",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authentication without client_id and with client_secret",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonResponse = pm.response.json();\r",
+									"\r",
+									"pm.test('Response status code is 422 for authentication without client_id',function(){\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"\r",
+									"pm.test('Content-Type is application/json',function(){\r",
+									"    pm.response.to.have.header('Content-Type','application/json');\r",
+									"});\r",
+									"\r",
+									"pm.test('Response for client_id is The client secret field is required.',function(){\r",
+									"    pm.expect(jsonResponse.data.client_id).to.be.eql('The client id field is required.')\r",
+									"})\r",
+									"\r",
+									"pm.test('Response message is the parameter is invalid',function(){\r",
+									"    pm.expect(jsonResponse.meta.message).to.eql('the parameter is invalid');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "client_id",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{clientSecret}}",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v2/token",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authentication with client_id and  client_secret but without grant type",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Response status code is 422 for authentication without client_id',function(){\r",
+									"    pm.expect(pm.response.code).to.not.eql(200)\r",
+									"});\r",
+									"\r",
+									"pm.test('Content-Type is application/json',function(){\r",
+									"    pm.response.to.have.header('Content-Type','application/json');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "client_id",
+									"value": "{{clientID}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{clientSecret}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v2/token",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SubmitOrder",
+			"item": [
+				{
+					"name": "Successfully Post an Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonResponse = pm.response.json()\r",
+									"\r",
+									"pm.test('Response status code is 200',function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test('Content-type is application/json',function(){\r",
+									"    pm.response.to.have.header('Content-type','application/json')\r",
+									"})\r",
+									"\r",
+									"pm.test('Response body contains success message', function () {\r",
+									"     pm.expect(pm.response.json().meta.message).to.equal(\"success\");\r",
+									"});\r",
+									"\r",
+									"pm.test('Ordered package id is as per expected',function(){\r",
+									"    pm.expect(jsonResponse.data.package_id).to.be.eql(pm.collectionVariables.get('simPackageID'))\r",
+									"})\r",
+									"\r",
+									"pm.test('Ordered quantity is as per expected',function(){\r",
+									"    pm.expect(jsonResponse.data.quantity).to.be.eql(6)\r",
+									"})\r",
+									"\r",
+									"pm.test('Ordered type is as per expected',function(){\r",
+									"    pm.expect(jsonResponse.data.type).to.be.eql(pm.collectionVariables.get('packageType'))\r",
+									"})\r",
+									"\r",
+									"pm.test('Ordered description is as per expected',function(){\r",
+									"    pm.expect(jsonResponse.data.description).to.be.eql(`${pm.collectionVariables.get('quantity')} ${pm.collectionVariables.get('packageType')} ${pm.collectionVariables.get('simPackageID')}`)\r",
+									"})\r",
+									"\r",
+									"pm.test('Response body data contains property as expected',function(){\r",
+									"    pm.expect(jsonResponse.data).to.have.property('id')\r",
+									"    pm.expect(jsonResponse.data).to.have.property('code')\r",
+									"    pm.expect(jsonResponse.data).to.have.property('currency')\r",
+									"    pm.expect(jsonResponse.data).to.have.property('esim_type')\r",
+									"    pm.expect(jsonResponse.data).to.have.property('validity')\r",
+									"    pm.expect(jsonResponse.data).to.have.property('package')\r",
+									"    pm.expect(jsonResponse.data).to.have.property('data')\r",
+									"    pm.expect(jsonResponse.data).to.have.property('price')\r",
+									"    pm.expect(jsonResponse.data).to.have.property('created_at')\r",
+									"    pm.expect(jsonResponse.data).to.have.property('manual_installation')\r",
+									"    pm.expect(jsonResponse.data).to.have.property('qrcode_installation')\r",
+									"    pm.expect(jsonResponse.data).to.have.property('installation_guides')\r",
+									"    pm.expect(jsonResponse.data).to.have.property('text')\r",
+									"    pm.expect(jsonResponse.data).to.have.property('voice')\r",
+									"    pm.expect(jsonResponse.data).to.have.property('net_price')\r",
+									"    pm.expect(jsonResponse.data).to.have.property('sims')\r",
+									"})\r",
+									"\r",
+									"pm.test('response body sims contains property as expected',function(){\r",
+									"    const simArray = jsonResponse.data.sims\r",
+									"    simArray.forEach(function(sim){\r",
+									"        pm.expect(sim).to.have.property('id')\r",
+									"        pm.expect(sim).to.have.property('created_at')\r",
+									"        pm.expect(sim).to.have.property('iccid')\r",
+									"        pm.expect(sim).to.have.property('lpa')\r",
+									"        pm.expect(sim).to.have.property('imsis')\r",
+									"        pm.expect(sim).to.have.property('matching_id')\r",
+									"        pm.expect(sim).to.have.property('qrcode')\r",
+									"        pm.expect(sim).to.have.property('qrcode_url')\r",
+									"        pm.expect(sim).to.have.property('airalo_code')\r",
+									"        pm.expect(sim).to.have.property('apn_type')\r",
+									"        pm.expect(sim).to.have.property('apn_value')\r",
+									"        pm.expect(sim).to.have.property('is_roaming')\r",
+									"        pm.expect(sim).to.have.property('confirmation_code')\r",
+									"    })\r",
+									"})\r",
+									"\r",
+									"//adding values of filterByCreated_at and filterByIccid in collection_variable list\r",
+									"\r",
+									"const simArray = jsonResponse.data.sims\r",
+									"simArray.forEach(function(sim){\r",
+									"    pm.collectionVariables.set('filterByCreated_at',sim.created_at)\r",
+									"    pm.collectionVariables.set('filterByIccid',sim.iccid)\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{token_type}} {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "quantity",
+									"value": "{{quantity}}",
+									"type": "text"
+								},
+								{
+									"key": "package_id",
+									"value": "{{simPackageID}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "{{packageType}}",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "{{quantity}} {{packageType}} {{simPackageID}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v2/orders",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Posting an order with invalid token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Response status on posting an order with invalid token',function(){\r",
+									"   pm.expect(pm.response.code).to.not.eql(200)\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token_type}} 599592597295792759725979",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "quantity",
+									"value": "{{quantity}}",
+									"type": "text"
+								},
+								{
+									"key": "package_id",
+									"value": "{{simPackageID}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "{{packageType}}",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "{{quantity}} {{packageType}} {{simPackageID}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v2/orders",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Posting an order without token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Response status on posting an order without token',function(){\r",
+									"   pm.expect(pm.response.code).to.not.eql(200);\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "quantity",
+									"value": "{{quantity}}",
+									"type": "text"
+								},
+								{
+									"key": "package_id",
+									"value": "{{simPackageID}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "{{packageType}}",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "{{quantity}} {{packageType}} {{simPackageID}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v2/orders",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Successfully Post an Order with Maximum quantity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonResponse = pm.response.json()\r",
+									"\r",
+									"pm.test('Response status code is 200',function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test('Content-type is application/json',function(){\r",
+									"    pm.response.to.have.header('Content-type','application/json')\r",
+									"})\r",
+									"\r",
+									"pm.test('Response body caontains success message', function () {\r",
+									"     pm.expect(pm.response.json().meta.message).to.equal(\"success\");\r",
+									"});\r",
+									"\r",
+									"pm.test('Ordered package id is as per expected',function(){\r",
+									"    pm.expect(jsonResponse.data.package_id).to.be.eql(pm.collectionVariables.get('simPackageID'))\r",
+									"})\r",
+									"\r",
+									"pm.test('Oredered quantity is as per expected',function(){\r",
+									"    pm.expect(jsonResponse.data.quantity).to.be.eql(parseInt(pm.collectionVariables.get('maxQuantity')))\r",
+									"})\r",
+									"\r",
+									"pm.test('Oredered type is as per expected',function(){\r",
+									"    pm.expect(jsonResponse.data.type).to.be.eql(pm.collectionVariables.get('packageType'))\r",
+									"})\r",
+									"\r",
+									"pm.test('Ordered description is as per expected',function(){\r",
+									"    pm.expect(jsonResponse.data.description).to.be.eql(`${pm.collectionVariables.get('quantity')} ${pm.collectionVariables.get('packageType')} ${pm.collectionVariables.get('simPackageID')}`)\r",
+									"})\r",
+									"\r",
+									"pm.test('Response body data contains property as expected',function(){\r",
+									"pm.expect(jsonResponse.data).to.have.property('id')\r",
+									"pm.expect(jsonResponse.data).to.have.property('code')\r",
+									"pm.expect(jsonResponse.data).to.have.property('currency')\r",
+									"pm.expect(jsonResponse.data).to.have.property('esim_type')\r",
+									"pm.expect(jsonResponse.data).to.have.property('validity')\r",
+									"pm.expect(jsonResponse.data).to.have.property('package')\r",
+									"pm.expect(jsonResponse.data).to.have.property('data')\r",
+									"pm.expect(jsonResponse.data).to.have.property('price')\r",
+									"pm.expect(jsonResponse.data).to.have.property('created_at')\r",
+									"pm.expect(jsonResponse.data).to.have.property('manual_installation')\r",
+									"pm.expect(jsonResponse.data).to.have.property('qrcode_installation')\r",
+									"pm.expect(jsonResponse.data).to.have.property('installation_guides')\r",
+									"pm.expect(jsonResponse.data).to.have.property('text')\r",
+									"pm.expect(jsonResponse.data).to.have.property('voice')\r",
+									"pm.expect(jsonResponse.data).to.have.property('voice')\r",
+									"pm.expect(jsonResponse.data).to.have.property('net_price')\r",
+									"pm.expect(jsonResponse.data).to.have.property('sims')\r",
+									"})\r",
+									"\r",
+									"pm.test('response body sims contains property as expected',function(){\r",
+									"const simArray = jsonResponse.data.sims\r",
+									"simArray.forEach(function(sim){\r",
+									" pm.expect(sim).to.have.property('id')\r",
+									" pm.expect(sim).to.have.property('created_at')\r",
+									"    pm.expect(sim).to.have.property('iccid')\r",
+									"    pm.expect(sim).to.have.property('lpa')\r",
+									"    pm.expect(sim).to.have.property('imsis')\r",
+									"    pm.expect(sim).to.have.property('matching_id')\r",
+									"    pm.expect(sim).to.have.property('qrcode')\r",
+									"    pm.expect(sim).to.have.property('qrcode_url')\r",
+									"    pm.expect(sim).to.have.property('airalo_code')\r",
+									"    pm.expect(sim).to.have.property('apn_type')\r",
+									"    pm.expect(sim).to.have.property('apn_value')\r",
+									"    pm.expect(sim).to.have.property('is_roaming')\r",
+									"    pm.expect(sim).to.have.property('confirmation_code')\r",
+									"})\r",
+									"})\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{token_type}} {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "quantity",
+									"value": "{{maxQuantity}}",
+									"type": "text"
+								},
+								{
+									"key": "package_id",
+									"value": "{{simPackageID}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "{{packageType}}",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "{{quantity}} {{packageType}} {{simPackageID}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v2/orders",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post an order with exceeding Maximum Quantity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Fixed the response body extraction using text() instead of json()\r",
+									"pm.test('Response status code on exceeding the quantity of items in the order',function(){\r",
+									"    pm.response.to.have.status(422);\r",
+									"})\r",
+									"\r",
+									"pm.test('Content-type is application/json',function(){\r",
+									"    pm.response.to.have.header('Content-type','application/json')\r",
+									"})\r",
+									"\r",
+									"pm.test('Response body contains : the parameter is invalid message', function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"the parameter is invalid\");\r",
+									"});\r",
+									"\r",
+									"pm.test('Error message for Ordered quantity: the quantity may not be greater than 50.',function(){\r",
+									"    pm.expect(pm.response.text()).to.include('The quantity may not be greater than 50.')\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token_type}} {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "quantity",
+									"value": "{{exceedingMaxQuantity}}",
+									"type": "text"
+								},
+								{
+									"key": "package_id",
+									"value": "{{simPackageID}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "{{packageType}}",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "{{quantity}} {{packageType}} {{simPackageID}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v2/orders",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post an order without providing quantity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Response status code on posting an order without quantity',function(){\r",
+									"    pm.response.to.have.status(401);\r",
+									"})\r",
+									"\r",
+									"pm.test('Content-type is application/json',function(){\r",
+									"    pm.response.to.have.header('Content-type','application/json')\r",
+									"})\r",
+									"\r",
+									"pm.test('Response body contains message: Forbidden', function () {\r",
+									"     pm.expect(pm.response.json().meta.message).to.include(\"Forbidden\");\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{token_type}} {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "quantity",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "package_id",
+									"value": "{{simPackageID}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "{{packageType}}",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "{{quantity}} {{packageType}} {{simPackageID}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v2/orders",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post an order with quantity value type as \"String\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Response status code on posting an order without quantity',function(){\r",
+									"    pm.response.to.have.status(401);\r",
+									"})\r",
+									"\r",
+									"pm.test('Content-type is application/json',function(){\r",
+									"    pm.response.to.have.header('Content-type','application/json')\r",
+									"})\r",
+									"\r",
+									"pm.test('Response body contains message: Forbidden', function () {\r",
+									"     pm.expect(pm.response.json().meta.message).to.include(\"Forbidden\");\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": " {{token_type}} {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "quantity",
+									"value": "ten",
+									"type": "text"
+								},
+								{
+									"key": "package_id",
+									"value": "{{simPackageID}}",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "{{packageType}}",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "{{quantity}} {{packageType}} {{simPackageID}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v2/orders",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post an order without providing package id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Response status code on posting an order without package id',function(){\r",
+									"    pm.response.to.have.status(401);\r",
+									"})\r",
+									"\r",
+									"pm.test('Content-type is application/json',function(){\r",
+									"    pm.response.to.have.header('Content-type','application/json')\r",
+									"})\r",
+									"\r",
+									"pm.test('Response body contains message: Forbidden', function () {\r",
+									"     pm.expect(pm.response.json().meta.message).to.include(\"Forbidden\");\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token_type}} {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "quantity",
+									"value": "{{quantity}}",
+									"type": "text"
+								},
+								{
+									"key": "package_id",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "{{packageType}}",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "{{quantity}} {{packageType}} {{simPackageID}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v2/orders",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post an order with package id value type as \"integers\" or \"unknown package id\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Response status code on posting an order without package id',function(){\r",
+									"    pm.response.to.have.status(401);\r",
+									"})\r",
+									"\r",
+									"pm.test('Content-type is application/json',function(){\r",
+									"    pm.response.to.have.header('Content-type','application/json')\r",
+									"})\r",
+									"\r",
+									"pm.test('Response body contains message: Forbidden', function () {\r",
+									"     pm.expect(pm.response.json().meta.message).to.include(\"Forbidden\");\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token_type}} {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "quantity",
+									"value": "{{quantity}}",
+									"type": "text"
+								},
+								{
+									"key": "package_id",
+									"value": "test_package_123",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "{{packageType}}",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "{{quantity}} {{packageType}} {{simPackageID}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/v2/orders",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GetSimList",
+			"item": [
+				{
+					"name": "Successfully retrieve complete eSIMs list",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonResponse = pm.response.json()\r",
+									"\r",
+									"pm.test('Response status is 200',function(){\r",
+									"pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Content-type is application/json',function(){\r",
+									"    pm.response.to.have.header('Content-Type','application/json')\r",
+									"})\r",
+									"\r",
+									"pm.test('Response message is success',function(){\r",
+									"pm.expect(jsonResponse.meta.message).to.equal('success')\r",
+									"})\r",
+									"\r",
+									"pm.test('Response body data contains property as expected',function(){\r",
+									"   let eSIMDetails =  jsonResponse.data\r",
+									"   eSIMDetails.forEach(function(eachEsimDetail){\r",
+									"console.log(eachEsimDetail.id)\r",
+									"pm.expect(eachEsimDetail).to.have.property('id')\r",
+									"pm.expect(eachEsimDetail).to.have.property('created_at')\r",
+									"pm.expect(eachEsimDetail).to.have.property('iccid')\r",
+									"pm.expect(eachEsimDetail).to.have.property('lpa')\r",
+									"pm.expect(eachEsimDetail).to.have.property('imsis')\r",
+									"pm.expect(eachEsimDetail).to.have.property('matching_id')\r",
+									"pm.expect(eachEsimDetail).to.have.property('confirmation_code')\r",
+									"pm.expect(eachEsimDetail).to.have.property('qrcode')\r",
+									"pm.expect(eachEsimDetail).to.have.property('qrcode_url')\r",
+									"pm.expect(eachEsimDetail).to.have.property('voucher_code')\r",
+									"pm.expect(eachEsimDetail).to.have.property('airalo_code')\r",
+									"pm.expect(eachEsimDetail).to.have.property('apn_type')\r",
+									"pm.expect(eachEsimDetail).to.have.property('apn_value')\r",
+									"pm.expect(eachEsimDetail).to.have.property('is_roaming')\r",
+									"pm.expect(eachEsimDetail).to.have.property('msisdn')\r",
+									"   })\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token_type}} {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/v2/sims",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"sims"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Successfully retrieve filtered eSIMs list",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonResponse = pm.response.json()\r",
+									"\r",
+									"pm.test('Response status is 200',function(){\r",
+									"pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Content-type is application/json',function(){\r",
+									"    pm.response.to.have.header('Content-Type','application/json')\r",
+									"})\r",
+									"\r",
+									"pm.test('Response message is success',function(){\r",
+									"pm.expect(jsonResponse.meta.message).to.equal('success')\r",
+									"})\r",
+									"\r",
+									"pm.test('Response body data contains property as expected',function(){\r",
+									"   let eSIMDetails =  jsonResponse.data\r",
+									"   eSIMDetails.forEach(function(eachEsimDetail){\r",
+									"console.log(eachEsimDetail.id)\r",
+									"pm.expect(eachEsimDetail).to.have.property('id')\r",
+									"pm.expect(eachEsimDetail).to.have.property('created_at')\r",
+									"pm.expect(eachEsimDetail).to.have.property('iccid')\r",
+									"pm.expect(eachEsimDetail).to.have.property('lpa')\r",
+									"pm.expect(eachEsimDetail).to.have.property('imsis')\r",
+									"pm.expect(eachEsimDetail).to.have.property('matching_id')\r",
+									"pm.expect(eachEsimDetail).to.have.property('confirmation_code')\r",
+									"pm.expect(eachEsimDetail).to.have.property('qrcode')\r",
+									"pm.expect(eachEsimDetail).to.have.property('qrcode_url')\r",
+									"pm.expect(eachEsimDetail).to.have.property('voucher_code')\r",
+									"pm.expect(eachEsimDetail).to.have.property('airalo_code')\r",
+									"pm.expect(eachEsimDetail).to.have.property('apn_type')\r",
+									"pm.expect(eachEsimDetail).to.have.property('apn_value')\r",
+									"pm.expect(eachEsimDetail).to.have.property('is_roaming')\r",
+									"pm.expect(eachEsimDetail).to.have.property('msisdn')\r",
+									"   })\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token_type}} {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/v2/sims?filter[iccid]={{filterByIccid}}&limit={{filterByLimit}}&page={{filterByPage}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"sims"
+							],
+							"query": [
+								{
+									"key": "filter[iccid]",
+									"value": "{{filterByIccid}}"
+								},
+								{
+									"key": "limit",
+									"value": "{{filterByLimit}}"
+								},
+								{
+									"key": "page",
+									"value": "{{filterByPage}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Token for Retrieval of eSIMs list",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Response status on retrieving esim list with invalid token',function(){\r",
+									"     pm.expect(pm.response.code).to.not.eql(200);\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token_type}} 123456789",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/v2/sims",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"sims"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve eSIMs list with invalid limit value",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonResponse = pm.response.json()\r",
+									"\r",
+									"pm.test('Response status on filtering eSim list with invalid limit value',function(){\r",
+									"pm.response.to.have.status(422)\r",
+									"})\r",
+									"\r",
+									"pm.test('Content-type is application/json',function(){\r",
+									"    pm.response.to.have.header('Content-Type','application/json')\r",
+									"})\r",
+									"\r",
+									"pm.test('Response limit : The limit must be an integer.',function(){\r",
+									"pm.expect(jsonResponse.meta.message).to.equal('The limit must be an integer.')\r",
+									"})\r",
+									"\r",
+									"pm.test('Response message is the parameter is invalid',function(){\r",
+									"pm.expect(jsonResponse.meta.message).to.equal('the parameter is invalid')\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token_type}} {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/v2/sims?filter[iccid]={{filterByIccid}}&limit=testlimit&page={{filterByPage}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"v2",
+								"sims"
+							],
+							"query": [
+								{
+									"key": "filter[iccid]",
+									"value": "{{filterByIccid}}"
+								},
+								{
+									"key": "limit",
+									"value": "testlimit"
+								},
+								{
+									"key": "page",
+									"value": "{{filterByPage}}"
+								},
+								{
+									"key": "filter[created_at]",
+									"value": "{{filterByCreated_at}}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": ""
+		},
+		{
+			"key": "token_type",
+			"value": ""
+		},
+		{
+			"key": "access_token",
+			"value": ""
+		},
+		{
+			"key": "clientID",
+			"value": ""
+		},
+		{
+			"key": "clientSecret",
+			"value": ""
+		},
+		{
+			"key": "maxQuantity",
+			"value": ""
+		},
+		{
+			"key": "exceedingMaxQuantity",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "quantity",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "simPackageID",
+			"value": ""
+		},
+		{
+			"key": "packageType",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "filterByLimit",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "filterByPage",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "filterByCreated_at",
+			"value": ""
+		},
+		{
+			"key": "filterByIccid",
+			"value": ""
+		}
+	]
+}
